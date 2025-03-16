@@ -50,6 +50,8 @@ function Navbar() {
     async function handleLogout() {
         window.location.reload();
         const { error } = await supabase.auth.signOut();
+        localStorage.removeItem('sb-access-token');
+        localStorage.removeItem('sb-refresh-token');
         if (error) {
             console.error('Logout Error:', error.message);
         } else {
