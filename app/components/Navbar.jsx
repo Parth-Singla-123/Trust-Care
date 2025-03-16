@@ -33,6 +33,8 @@ function Navbar() {
 
     async function handleSubmit() {
         window.location.reload();
+        setTimeout(() => {     
+        }, 3000);
         const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
@@ -46,6 +48,7 @@ function Navbar() {
     }
 
     async function handleLogout() {
+        window.location.reload();
         const { error } = await supabase.auth.signOut();
         if (error) {
             console.error('Logout Error:', error.message);
@@ -157,12 +160,28 @@ function Navbar() {
                     <Link href="/Contact" className="block hover:text-blue-400 transition">Contact</Link>
 
                     <div className="mt-6">
+                        {user ? (
+                        <>
+                        <div className="flex flex-col space-y-3 p-2">
+                            <span className="font-bold text-xl md:text-base text-white mx-auto">
+                                {user.user_metadata.full_name}
+                            </span>
+                            <button
+                                className="bg-gray-900 text-white px-3 lg:px-4 py-1.5 lg:py-2 rounded-full hover:bg-gray-800 transition font-semibold shadow-md"
+                                onClick={handleLogout}
+                            >
+                                Logout
+                            </button>
+                        </div>
+                        </>
+                    ) : (
                         <button className="flex items-center justify-center bg-white text-gray-700 px-4 py-2 rounded-full border border-gray-300 hover:bg-gray-100 transition font-semibold shadow-md w-full"
                             onClick={handleSubmit}
                         >
                             <FcGoogle className="text-2xl mr-2" />
                             <span className="text-sm">Sign in with Google</span>
                         </button>
+                    )}
                     </div>
                 </div>
             </div>
